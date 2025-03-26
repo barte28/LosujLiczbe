@@ -1,6 +1,7 @@
 package com.example.przedkartkowka;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -25,14 +26,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
         Random random = new Random();
         losoweViewModel = new ViewModelProvider(this).get(LosoweViewModel.class);
-        binding.textViewLiczba.setText(String.valueOf(losoweViewModel.getLosowa()));
+
+        losoweViewModel.getLosowa().observe(
+                this,
+                new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer integer) {
+                        binding.textViewLiczba.setText(String.valueOf(integer));
+                    }
+                }
+        );
 
         binding.button.setOnClickListener(
             new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 losoweViewModel.wylosuj();
-                binding.textViewLiczba.setText(String.valueOf(losoweViewModel.getLosowa()));
+
             }
         });
 
